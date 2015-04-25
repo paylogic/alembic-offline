@@ -34,7 +34,7 @@ update account set name='some';
 
 -- PHASE::2::;
 
--- SCRIPT::/home/vagrant/workspace/alembic-offline/tests/migrations/scripts/script.py::;
+-- SCRIPT::scripts/script.py::;
 
 INSERT INTO alembic_version (version_num) VALUES ('1');
 
