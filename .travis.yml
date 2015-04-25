@@ -1,18 +1,20 @@
 sudo: false
 language: python
-python: "3.4"
+python: '3.4'
 env:
   matrix:
-    - TESTENV=py26
-    - TESTENV=py27
-    - TESTENV=py34
-    - TESTENV=coveralls
+  - TESTENV=py26
+  - TESTENV=py27
+  - TESTENV=py34
+  - TESTENV=coveralls
 install:
-  - pip install tox
+- pip install tox
 script: tox -e $TESTENV
 branches:
   except:
-    - /^\d/
+  - /^\d/
 notifications:
   email:
   - opensource-tests@paylogic.eu
+  slack:
+    secure: ai8EeLyyVsIjkcKuLaRm58OEuA276g8kEAeerFHgNODMrGpoMe4OK7gk4cp1pC0M1cEh5nbfIeK//feAhQHdkrfvzb+4Qg3dH8UB0lxI2LHKjVdFBumfAO3yPh8eH2BED/vpwI1N1OjRdpQssVqXRZVU3fZ1qiuI/Oyhm+LM2AA=
