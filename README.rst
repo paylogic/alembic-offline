@@ -79,7 +79,7 @@ Will give the sql output (for sqlite):
 
     -- PHASE::2::;
 
-    -- SCRIPT::/home/vagrant/workspace/alembic-offline/tests/migrations/scripts/script.pyc::;
+    -- SCRIPT::scripts/script.py::;
 
     INSERT INTO alembic_version (version_num) VALUES ('1');
 
