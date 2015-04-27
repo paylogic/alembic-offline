@@ -2,10 +2,16 @@
 
 import codecs
 from os.path import abspath, dirname, join
+import sys
 
 from setuptools import setup
 
 long_description = []
+
+install_requires = ['alembic']
+
+if sys.version_info < (3, 0, 0):
+    install_requires.append('subprocess32')
 
 tests_require = [
     "mock==1.0.1",
@@ -42,7 +48,7 @@ setup(
         'Programming Language :: Python :: 3.4',
     ],
     packages=["alembic_offline"],
-    install_requires=['alembic'],
+    install_requires=install_requires,
     entry_points="""
     [console_scripts]
     alembic-offline = alembic.config:main

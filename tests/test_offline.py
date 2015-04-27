@@ -164,7 +164,7 @@ CREATE TABLE account (
                 'steps': [
                     {
                         'type': 'python',
-                        'script': '',
+                        'script': "#! /usr/bin/python\nprint('script is executed')\n",
                         'path': 'scripts/script.py'
                     },
                     {
