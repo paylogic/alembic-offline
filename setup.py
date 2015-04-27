@@ -25,7 +25,7 @@ setup(
     license="MIT license",
     author_email="developers@paylogic.com",
     url="https://github.com/paylogic/alembic-offline",
-    version="1.0.0",
+    version="1.0.1",
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Other Environment',
@@ -43,6 +43,10 @@ setup(
     ],
     packages=["alembic_offline"],
     install_requires=['alembic'],
+    entry_points="""
+    [console_scripts]
+    alembic-offline = alembic.config:main
+    """,
     tests_require=tests_require,
     extras_require=dict(test=tests_require)
 )

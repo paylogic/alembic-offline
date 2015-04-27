@@ -23,6 +23,20 @@ alembic-offline is an extension for alemic to enrich offline functionality of th
 Usage
 -----
 
+Phased migrations
+^^^^^^^^^^^^^^^^^
+
+alembic-offline introduces a helper which allows to implement phased migrations, e.g. those which steps
+are divided into logical phases. For example, you can have steps to be executed before code deploy and
+those after.
+
+In your alembic config file (main section):
+
+::
+
+    phases = before-deploy after-deploy final
+    default-phase = after-deploy
+
 In your version file:
 
 .. code-block:: python
@@ -63,7 +77,7 @@ Will give the sql output (for sqlite):
 
     -- Running upgrade  -> 1
 
-    -- PHASE::0::;
+    -- PHASE::before-deploy::;
 
     CREATE TABLE account (
         id INTEGER NOT NULL,{space}
@@ -73,15 +87,75 @@ Will give the sql output (for sqlite):
         PRIMARY KEY (id)
     );
 
-    -- PHASE::1::;
+    -- PHASE::after-deploy::;
 
     update account set name='some';
 
-    -- PHASE::2::;
+    -- PHASE::final::;
 
     -- SCRIPT::scripts/script.py::;
 
     INSERT INTO alembic_version (version_num) VALUES ('1');
+
+
+Arbitrary script as operation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For complex migrations, it's not enough to execute sql, you might need some script to be executed instead.
+For that, there's special operation:
+
+.. code-block:: python
+
+    from alembic_offline import execute_script
+
+    def upgrade():
+        execute_script('scripts/script.py')
+
+If you'll get migration sql, it will be rendered as SQL comment:
+
+..code-block:: sql
+
+    -- SCRIPT::scripts/script.py::;
+
+For those who execute migrations it will be visible and they can execute the script manually.
+However, if migration procedure is highly customized, you can use alembic-offline API described below.
+`get_migration_data` returns script migration steps in special form so you can automate their execution.
+
+
+Get migration data
+^^^^^^^^^^^^^^^^^^
+
+alembic-offline provides specialized API to get certain migration data as dictionary:
+
+.. code-block:: python
+
+    from alembic_offline import get_migration_data
+
+    from alemic.config import Config
+
+    config = Config('path to alemic.ini')
+
+    data = get_migration_data(config, 'your-revision')
+
+    assert data == {
+        'revision': 'your-revision',
+        'phases': {
+            'after-deploy': [
+                {
+                    'type': 'mysql',
+                    'script': 'alter table account add column name VARCHAR(255)'
+                },
+                {
+                    'type': 'python',
+                    'script': 'from app.models import Session, Account; Session.add(Account()); Session.commit()',
+                    'path': 'scripts/my_script.py'
+                },
+            ]
+        }
+    }
+
+`get_migration_data` requires both `phases` and `default-phase` configuration options to be set.
+`default-phase` is needed to be able to get migration data even for simple migrations without phases.
 
 
 Contact
