@@ -113,7 +113,7 @@ For that, there's special operation:
 
 If you'll get migration sql, it will be rendered as SQL comment:
 
-..code-block:: sql
+.. code-block:: sql
 
     -- SCRIPT::scripts/script.py::;
 

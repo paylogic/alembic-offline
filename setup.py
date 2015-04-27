@@ -25,7 +25,7 @@ setup(
     license="MIT license",
     author_email="developers@paylogic.com",
     url="https://github.com/paylogic/alembic-offline",
-    version="1.0.1",
+    version="1.0.2",
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Other Environment',
