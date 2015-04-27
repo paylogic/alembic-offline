@@ -79,10 +79,10 @@ Will give the sql output (for sqlite):
     -- PHASE::before-deploy::;
 
     CREATE TABLE account (
-        id INTEGER NOT NULL,{space}
-        name VARCHAR(50) NOT NULL,{space}
-        description NVARCHAR(200),{space}
-        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,{space}
+        id INTEGER NOT NULL,
+        name VARCHAR(50) NOT NULL,
+        description NVARCHAR(200),
+        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id)
     );
 
