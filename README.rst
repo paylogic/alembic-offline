@@ -19,7 +19,6 @@ alembic-offline is an extension for alemic to enrich offline functionality of th
 
 .. contents::
 
-
 Usage
 -----
 
@@ -97,6 +96,10 @@ Will give the sql output (for sqlite):
 
     INSERT INTO alembic_version (version_num) VALUES ('1');
 
+As you see, phases are rendered as SQL comments to divide migration steps, so those who execute migration
+can see which phase's step it is.
+However, if migration procedure is highly customized, you can use alembic-offline API described below.
+`get_migration_data` returns migration phases in special form so you can automate their execution.
 
 Arbitrary script as operation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -120,7 +123,6 @@ If you'll get migration sql, it will be rendered as SQL comment:
 For those who execute migrations it will be visible and they can execute the script manually.
 However, if migration procedure is highly customized, you can use alembic-offline API described below.
 `get_migration_data` returns script migration steps in special form so you can automate their execution.
-
 
 Get migration data
 ^^^^^^^^^^^^^^^^^^
@@ -157,13 +159,11 @@ alembic-offline provides specialized API to get certain migration data as dictio
 `get_migration_data` requires both `phases` and `default-phase` configuration options to be set.
 `default-phase` is needed to be able to get migration data even for simple migrations without phases.
 
-
 Contact
 -------
 
 If you have questions, bug reports, suggestions, etc. please create an issue on
 the `GitHub project page <http://github.com/paylogic/alembic-offline>`_.
-
 
 License
 -------
@@ -171,6 +171,5 @@ License
 This software is licensed under the `MIT license <http://en.wikipedia.org/wiki/MIT_License>`_
 
 Please refer to the `license file <https://github.com/paylogic/alembic-offline/blob/master/LICENSE.txt>`_
-
 
 © 2015 Anatoly Bubenkov, Paylogic International and others.
