@@ -62,42 +62,80 @@ def get_migration_data(config, revision):
         }
     """
     config.output_buffer = StringIO()
-    script = ScriptDirectory.from_config(config)
+    script_directory = ScriptDirectory.from_config(config)
+    script = script_directory.get_revision(revision)
     phases = frozenset(phase.strip() for phase in config.get_main_option('phases', '').split())
+    script_attrs = get_script_attributes(config, script)
     default_phase = config.get_main_option('default-phase')
     if not default_phase or default_phase not in phases:
         raise RuntimeError("'default-phase' should be configured and should be a member of 'phases'")
-    for sc in script.get_revisions(revision):
-        revision_range = ':'.join((sc.down_revision, revision)) if sc.down_revision else revision
-        upgrade(config, revision_range, sql=True)
+    revision_range = ':'.join((script.down_revision, revision)) if script.down_revision else revision
+    upgrade(config, revision_range, sql=True)
     output_text = config.output_buffer.getvalue()
     dialect = make_url(config.get_main_option('sqlalchemy.url')).get_dialect().name
     phase_texts = PHASE_RE.split(output_text)
     if len(phase_texts) < 2:
         phase_texts.insert(0, default_phase)
-    if not sc.down_revision and len(phase_texts) > 2:
+    if not script.down_revision and len(phase_texts) > 2:
         phase_texts[1] = phase_texts.pop(0) + phase_texts[1]
-    phases = []
+    phases = {}
     for phase_name, phase_text in grouper(phase_texts, 2):
         script_texts = SCRIPT_RE.split(phase_text)
         if not script_texts[0]:
             del script_texts[0]
         steps = []
-        phases.append(dict(name=phase_name, steps=steps))
-        if len(script_texts) < 2:
+        phases[phase_name] = dict(name=phase_name, steps=steps)
+        if len(script_texts) % 2:
             script_texts.insert(0, None)
         for script_name, script_text in grouper(script_texts, 2):
             if script_name:
-                steps.append(get_script_data(script, script_name))
+                steps.append(get_script_data(script_directory, script_name))
             steps.append(
                 dict(type=dialect, script=script_text.strip())
             )
     return dict(
         revision=revision,
+        attributes=script_attrs,
         phases=phases)
 
 
-def get_script_data(script, file_name):
+def get_script_attributes(config, script):
+    """Get additional script attributes.
+
+    :param config: alembic config object
+    :type config: alembic.config.Config
+    :param script: alembic script object
+    :type script: alembic.config.Script
+
+    :return: dict of script attributes
+    :rtype: dict
+    """
+    attrs = frozenset(attr.strip() for attr in config.get_main_option('script-attributes', '').split())
+    result = {}
+    for attr in attrs:
+        try:
+            value = getattr(script.module, attr)
+        except AttributeError:
+            raise RuntimeError('{0} attribute was configured but not found in {1} script'.format(
+                attr, script.revision))
+        result[attr] = value
+    return result
+
+
+def get_migrations_data(config):
+    """Get migration data for all migrations in script directory.
+
+    :param config: alembic config object
+    :type config: alembic.config.Config
+
+    :return: migrations data list in form:
+        [<migration data 1>, <migration data 2>, ...]
+    """
+    script_directory = ScriptDirectory.from_config(config)
+    return [get_migration_data(config, script.revision) for script in script_directory.walk_revisions()]
+
+
+def get_script_data(script_directory, file_name):
     """Get script data.
 
     :param script: alembic script directory object
@@ -112,7 +150,7 @@ def get_script_data(script, file_name):
     type_, encoding = guess_type(file_name)
     if 'text/x-' in type_:
         script_type = type_[7:]
-    script_file_name = os.path.join(script.dir, file_name)
+    script_file_name = os.path.join(script_directory.dir, file_name)
     with codecs.open(script_file_name, encoding='utf-8') as fd:
-        script = fd.read()
-    return dict(type=script_type, script=script, path=file_name)
+        script_text = fd.read()
+    return dict(type=script_type, script=script_text, path=file_name)

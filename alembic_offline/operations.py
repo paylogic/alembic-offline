@@ -11,5 +11,5 @@ def execute_script(file_name):
     :param file_name: script file name
     :type file_name: str
     """
-    file_name = file_name.replace(os.path.commonprefix([alembic.context.script.dir, file_name]), '')[1:]
+    file_name = os.path.relpath(file_name, alembic.context.script.dir)
     alembic.op.execute(SCRIPT_FORMAT.format(file_name))

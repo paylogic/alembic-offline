@@ -94,25 +94,28 @@ def test_migration_data_simple():
     config.set_main_option("sqlalchemy.url", "sqlite:///")
     config.set_main_option("phases", "before-deploy after-deploy final")
     config.set_main_option("default-phase", "after-deploy")
+    config.set_main_option("script-attributes", "some_attribute")
     data = get_migration_data(config, revision='simple')
     assert data == {
-        'phases': [
-            {
-                'steps': [
-                    {
-                        'type': 'sqlite',
-                        'script': u"""
+        'attributes': {'some_attribute': 'some-value'},
+        'phases': {
+            'after-deploy':
+                {
+                    'name': 'after-deploy',
+                    'steps': [
+                        {
+                            'type': 'sqlite',
+                            'script': u"""
 -- Running upgrade 1 -> simple
 
 ALTER TABLE account DROP COLUMN id;
 
 UPDATE alembic_version SET version_num='simple' WHERE alembic_version.version_num = '1';
 """[1:-1]
-                    }
-                ],
-                'name': 'after-deploy'
-            }
-        ],
+                        }
+                    ],
+                }
+        },
         'revision': 'simple'
     }
 
@@ -126,8 +129,8 @@ def test_migration_data():
     config.set_main_option("default-phase", "after-deploy")
     data = get_migration_data(config, revision='1')
     assert data == {
-        'phases': [
-            {
+        'phases': {
+            'before-deploy': {
                 'name': u'before-deploy',
                 'steps': [
                     {
@@ -150,7 +153,7 @@ CREATE TABLE account (
                     }
                 ]
             },
-            {
+            'after-deploy': {
                 'name': u'after-deploy',
                 'steps': [
                     {
@@ -159,7 +162,7 @@ CREATE TABLE account (
                     }
                 ]
             },
-            {
+            'final': {
                 'name': u'final',
                 'steps': [
                     {
@@ -173,6 +176,7 @@ CREATE TABLE account (
                     },
                 ],
             }
-        ],
+        },
+        'attributes': {},
         'revision': '1'
     }
