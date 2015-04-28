@@ -128,7 +128,7 @@ def test_migration_data():
     config.set_main_option("phases", "before-deploy after-deploy final")
     config.set_main_option("default-phase", "after-deploy")
     data = get_migration_data(config, revision='1')
-    assert data == {
+    expected_data = {
         'phases': {
             'before-deploy': {
                 'name': u'before-deploy',
@@ -167,12 +167,17 @@ CREATE TABLE account (
                 'steps': [
                     {
                         'type': 'python',
-                        'script': '',
+                        'script': u"""#! /usr/bin/python
+
+
+if __name__ == '__main__':
+    print('script is executed')
+""",
                         'path': 'scripts/script.py'
                     },
                     {
                         'type': 'sqlite',
-                        'script': "INSERT INTO alembic_version (version_num) VALUES ('1');",
+                        'script': u"INSERT INTO alembic_version (version_num) VALUES ('1');",
                     },
                 ],
             }
@@ -180,3 +185,4 @@ CREATE TABLE account (
         'attributes': {},
         'revision': '1'
     }
+    assert data == expected_data

@@ -90,9 +90,11 @@ def get_migration_data(config, revision):
         for script_name, script_text in grouper(script_texts, 2):
             if script_name:
                 steps.append(get_script_data(script_directory, script_name))
-            steps.append(
-                dict(type=dialect, script=script_text.strip())
-            )
+            script_text = script_text.strip()
+            if script_text:
+                steps.append(
+                    dict(type=dialect, script=script_text)
+                )
     return dict(
         revision=revision,
         attributes=script_attrs,

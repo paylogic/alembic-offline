@@ -123,6 +123,7 @@ If you'll get migration sql, it will be rendered as SQL comment:
 For those who execute migrations it will be visible and they can execute the script manually.
 However, if migration procedure is highly customized, you can use alembic-offline API described below.
 `get_migration_data` returns script migration steps in special form so you can automate their execution.
+For online mode, the script will be executed as subprocess via python `subprocess` module.
 
 Get migration data
 ^^^^^^^^^^^^^^^^^^
@@ -158,6 +159,40 @@ alembic-offline provides specialized API to get certain migration data as dictio
 
 `get_migration_data` requires both `phases` and `default-phase` configuration options to be set.
 `default-phase` is needed to be able to get migration data even for simple migrations without phases.
+
+Get migration data in batch
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+alembic-offline provides an API call to get migration data for all revisions:
+
+.. code-block:: python
+
+    from alembic_offline import get_migrations_data
+
+    from alemic.config import Config
+
+    config = Config('path to alemic.ini')
+
+    data = get_migrations_data(config)
+
+    assert data == [
+        {
+            'revision': 'your-revision',
+            'phases': {
+                'after-deploy': [
+                    {
+                        'type': 'mysql',
+                        'script': 'alter table account add column name VARCHAR(255)'
+                    },
+                    {
+                        'type': 'python',
+                        'script': 'from app.models import Session, Account; Session.add(Account()); Session.commit()',
+                        'path': 'scripts/my_script.py'
+                    },
+                ]
+            }
+        }
+    ]
 
 Contact
 -------

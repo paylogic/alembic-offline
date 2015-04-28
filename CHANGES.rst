@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.0.4
+-----
+
+* online script execution implemented (bubenkoff)
+* `get_migrations_data` API (bubenkoff)
+
 1.0.3
 -----
 
