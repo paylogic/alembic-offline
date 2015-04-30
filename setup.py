@@ -1,4 +1,4 @@
-"""Setup script for the `wsgi-statsd' package."""
+"""Setuptools entry point."""
 
 import codecs
 from os.path import abspath, dirname, join
