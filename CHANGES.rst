@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.0.5
+-----
+
+* correctly handle multi-phased migration data extraction (bubenkoff)
+
 1.0.4
 -----
 

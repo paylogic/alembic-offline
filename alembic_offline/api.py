@@ -74,10 +74,10 @@ def get_migration_data(config, revision):
     output_text = config.output_buffer.getvalue()
     dialect = make_url(config.get_main_option('sqlalchemy.url')).get_dialect().name
     phase_texts = PHASE_RE.split(output_text)
-    if len(phase_texts) < 2:
-        phase_texts.insert(0, default_phase)
     if not script.down_revision and len(phase_texts) > 2:
         phase_texts[1] = phase_texts.pop(0) + phase_texts[1]
+    if len(phase_texts) % 2:
+        phase_texts.insert(0, default_phase)
     phases = {}
     for phase_name, phase_text in grouper(phase_texts, 2):
         script_texts = SCRIPT_RE.split(phase_text)
