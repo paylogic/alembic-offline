@@ -48,6 +48,7 @@ def get_migration_data(config, revision):
     :return: migration data for given revision in form:
         {
             'revision': '123123123',
+            'down_revision': '234234234',
             'phases': [
                 {
                     'name': 'before-deploy',
@@ -97,6 +98,7 @@ def get_migration_data(config, revision):
                 )
     return dict(
         revision=revision,
+        down_revision=script.down_revision,
         attributes=script_attrs,
         phases=phases)
 
@@ -134,7 +136,7 @@ def get_migrations_data(config):
         [<migration data 1>, <migration data 2>, ...]
     """
     script_directory = ScriptDirectory.from_config(config)
-    return [get_migration_data(config, script.revision) for script in script_directory.walk_revisions()]
+    return [get_migration_data(config, script.revision) for script in reversed(list(script_directory.walk_revisions()))]
 
 
 def get_script_data(script_directory, file_name):

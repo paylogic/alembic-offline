@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.1.0
+-----
+
+* add down_revision to migration data (bubenkoff)
+* reverse migration order to simplify the application (bubenkoff)
+
 1.0.5
 -----
 

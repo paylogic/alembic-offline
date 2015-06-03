@@ -116,7 +116,8 @@ UPDATE alembic_version SET version_num='simple' WHERE alembic_version.version_nu
                     ],
                 }
         },
-        'revision': 'simple'
+        'revision': 'simple',
+        'down_revision': '1',
     }
 
 
@@ -183,6 +184,7 @@ if __name__ == '__main__':
             }
         },
         'attributes': {},
-        'revision': '1'
+        'revision': '1',
+        'down_revision': None,
     }
     assert data == expected_data
