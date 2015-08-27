@@ -172,7 +172,7 @@ def generate_migration_graph(config, label_callback=None):
     """
     def default_label(data):
         attributes = []
-        for key, value in data['attributes'].iteritems():
+        for key, value in data['attributes'].items():
             attributes.append(u'- {0}: {1}'.format(key, value))
         return u'{0}\n{1}'.format(data['revision'], '\n'.join(attributes))
 
