@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.2.0
+-----
+
+* add migration dependency tree generation command (hvdklauw)
+
 1.1.0
 -----
 
