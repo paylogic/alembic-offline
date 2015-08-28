@@ -194,6 +194,29 @@ alembic-offline provides an API call to get migration data for all revisions:
         }
     ]
 
+Command line utilities
+^^^^^^^^^^^^^^^^^^^^^^
+
+Because with alembic revisions it's sometimes hard to find which the correct down revision should be; especially
+when there are multiple heads we added the alembic-offline graph command.
+
+The graph command will generate a `dot file <https://en.wikipedia.org/wiki/DOT_(graph_description_language)>`_ of
+the revisions, this file can then be converted to an image for easy visualization.
+
+Usage:
+
+::
+
+    alembic-offline graph --filename revisions.dot --alembic-config path/to/alembic.ini
+
+Then if you have `graphviz <https://en.wikipedia.org/wiki/Graphviz>`_ installed you can run:
+
+::
+
+    dot -Tpng -o revisions.png revisions.dot
+
+To generate a png image.
+
 Contact
 -------
 
