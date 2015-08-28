@@ -17,6 +17,7 @@ tests_require = [
     "mock==1.0.1",
     "pylama==6.3.1",
     "pytest==2.7.0",
+    "pytest-mock==0.4.3",
 ]
 
 for text_file in ['README.rst', 'CHANGES.rst']:
@@ -51,7 +52,7 @@ setup(
     install_requires=install_requires,
     entry_points="""
     [console_scripts]
-    alembic-offline = alembic.config:main
+    alembic-offline = alembic_offline.script:main
     """,
     tests_require=tests_require,
     extras_require=dict(test=tests_require)

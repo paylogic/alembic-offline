@@ -158,3 +158,35 @@ def get_script_data(script_directory, file_name):
     with codecs.open(script_file_name, encoding='utf-8') as fd:
         script_text = fd.read()
     return dict(type=script_type, script=script_text, path=file_name)
+
+
+def generate_migration_graph(config, label_callback=None):
+    """Generate a graphviz dot digraph containing a graph of all the revisions.
+
+    :param script: alembic script directory object
+    :type script: alembic.script.ScriptDirectory
+    :param label_callback: A callable to use for the label, will be passed the migration's data from get_migration_data.
+    :type label_callback: callable.
+
+    :return: A string with the dot digraph.
+    """
+    def default_label(data):
+        attributes = []
+        for key, value in data['attributes'].items():
+            attributes.append(u'- {0}: {1}'.format(key, value))
+        return u'{0}\n{1}'.format(data['revision'], '\n'.join(attributes))
+
+    if not label_callback:
+        label_callback = default_label
+    data = get_migrations_data(config)
+    labels = []
+    graphs = []
+    for migration in data:
+        labels.append(u'"{0}" [label="{1}"];'.format(
+            migration['revision'],
+            label_callback(migration).replace('"', '\\"').replace('\n', '\\n'))
+        )
+        if migration['down_revision']:
+            graphs.append(u'"{0}" -> "{1}";'.format(migration['revision'], migration['down_revision']))
+
+    return u"digraph revisions {{\n\t{0}\n\n\t{1}\n}}".format("\n\t".join(labels), "\n\t".join(graphs))
