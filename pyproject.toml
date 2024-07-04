@@ -24,6 +24,9 @@ classifiers = [
     'Programming Language :: Python :: 3.11',
     'Programming Language :: Python :: 3.12',
 ]
+dependencies = [
+  "alembic >= 1.13.1"
+]
 
 [project.urls]
 Homepage = "https://github.com/paylogic/alembic-offline"
