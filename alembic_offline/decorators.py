@@ -1,6 +1,6 @@
 """alembic-offline decorators."""
 from itertools import chain
-from collections import Iterable
+from collections.abc import Iterable
 from functools import wraps
 
 import alembic
