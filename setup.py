@@ -22,7 +22,7 @@ for text_file in ['README.rst', 'CHANGES.rst']:
 
 setup(
     name="alembic-offline",
-    description="Offline extensions for alemic database migration framework",
+    description="Offline extensions for alembic database migration framework",
     long_description='\n'.join(long_description),
     author="Anatoly Bubenkov, Paylogic International and others",
     license="MIT license",
