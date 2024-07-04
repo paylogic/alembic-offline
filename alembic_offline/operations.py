@@ -2,15 +2,12 @@
 import os.path
 import alembic
 
-try:
-    import subprocess32 as subprocess
-except ImportError:
-    import subprocess
+import subprocess
 
 SCRIPT_FORMAT = '-- SCRIPT::{0}::'
 
 
-def execute_script(file_name):
+def execute_script(file_name: str) -> None:
     """Execute arbitrary script.
 
     :param file_name: script file name
