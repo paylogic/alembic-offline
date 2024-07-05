@@ -4,6 +4,10 @@ python: '3.10'
 env:
   matrix:
   - TESTENV=py34
+  - TESTENV=py39
+  - TESTENV=py310
+  - TESTENV=py311
+  - TESTENV=py312
   - TESTENV=coveralls
 install:
 - pip install tox
