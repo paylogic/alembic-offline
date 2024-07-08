@@ -22,7 +22,7 @@ for text_file in ['README.rst', 'CHANGES.rst']:
 
 setup(
     name="alembic-offline",
-    description="Offline extensions for alembic database migration framework",
+    description="Offline extensions for Alembic database migration framework for SQLAlchemy",
     long_description='\n'.join(long_description),
     author="Anatoly Bubenkov, Paylogic International and others",
     license="MIT license",
@@ -39,7 +39,6 @@ setup(
         'Operating System :: Unix',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',

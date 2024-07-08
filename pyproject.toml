@@ -5,9 +5,9 @@ authors = [
     { name="Paylogic International", email="developers@paylogic.com" },
     { name="Anatoly Bubenkov" }
 ]
-description = "Offline extensions for alembic database migration framework"
+description = "Offline extensions for Alembic database migration framework for SQLAlchemy"
 readme = "README.rst"
-requires-python = ">=3.4"
+requires-python = ">=3.8"
 classifiers = [
     'Development Status :: 4 - Beta',
     'Environment :: Other Environment',
@@ -18,7 +18,6 @@ classifiers = [
     'Operating System :: Unix',
     'Programming Language :: Python',
     'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.4',
     'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
     'Programming Language :: Python :: 3.11',

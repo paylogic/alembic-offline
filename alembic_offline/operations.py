@@ -8,11 +8,7 @@ SCRIPT_FORMAT = '-- SCRIPT::{0}::'
 
 
 def execute_script(file_name: str) -> None:
-    """Execute arbitrary script.
-
-    :param file_name: script file name
-    :type file_name: str
-    """
+    """Execute arbitrary script."""
     file_name = os.path.relpath(file_name, alembic.context.script.dir)
     context = alembic.context.get_context()
     if context.as_sql:
