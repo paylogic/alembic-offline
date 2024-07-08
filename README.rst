@@ -15,7 +15,7 @@ alembic-offline
     :scale: 100%
     :target: https://readthedocs.org/projects/alembic-offline/
 
-alembic-offline is an extension for alemic to enrich offline functionality of the migrations
+alembic-offline is an extension for Alembic to enrich offline functionality of migrations using SQLAlchemy
 
 .. contents::
 
@@ -134,9 +134,9 @@ alembic-offline provides specialized API to get certain migration data as dictio
 
     from alembic_offline import get_migration_data
 
-    from alemic.config import Config
+    from alembic.config import Config
 
-    config = Config('path to alemic.ini')
+    config = Config('path to alembic.ini')
 
     data = get_migration_data(config, 'your-revision')
 
@@ -169,9 +169,9 @@ alembic-offline provides an API call to get migration data for all revisions:
 
     from alembic_offline import get_migrations_data
 
-    from alemic.config import Config
+    from alembic.config import Config
 
-    config = Config('path to alemic.ini')
+    config = Config('path to alembic.ini')
 
     data = get_migrations_data(config)
 
@@ -194,29 +194,6 @@ alembic-offline provides an API call to get migration data for all revisions:
         }
     ]
 
-Command line utilities
-^^^^^^^^^^^^^^^^^^^^^^
-
-Because with alembic revisions it's sometimes hard to find which the correct down revision should be; especially
-when there are multiple heads we added the alembic-offline graph command.
-
-The graph command will generate a `dot file <https://en.wikipedia.org/wiki/DOT_(graph_description_language)>`_ of
-the revisions, this file can then be converted to an image for easy visualization.
-
-Usage:
-
-::
-
-    alembic-offline graph --filename revisions.dot --alembic-config path/to/alembic.ini
-
-Then if you have `graphviz <https://en.wikipedia.org/wiki/Graphviz>`_ installed you can run:
-
-::
-
-    dot -Tpng -o revisions.png revisions.dot
-
-To generate a png image.
-
 Contact
 -------
 
@@ -227,7 +204,5 @@ License
 -------
 
 This software is licensed under the `MIT license <http://en.wikipedia.org/wiki/MIT_License>`_
-
-Please refer to the `license file <https://github.com/paylogic/alembic-offline/blob/master/LICENSE.txt>`_
 
 © 2015 Anatoly Bubenkov, Paylogic International and others.
