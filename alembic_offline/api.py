@@ -1,18 +1,18 @@
 """alembic-offline api functions."""
 import codecs
+from collections.abc import Iterable
 from mimetypes import guess_type
 import os.path
 import re
+from typing import Callable, Optional
 
+from alembic.config import Config
 from sqlalchemy.engine.url import make_url
 
 from alembic.command import upgrade
-from alembic.script import ScriptDirectory
+from alembic.script import ScriptDirectory, Script
 
-try:
-    from StringIO import StringIO
-except ImportError:  # pragma: no cover
-    from io import StringIO
+from io import StringIO
 
 from .decorators import PHASE_FORMAT
 from .operations import SCRIPT_FORMAT
@@ -21,31 +21,17 @@ PHASE_RE = re.compile((PHASE_FORMAT + ';\n\n').format("(.+)"), re.MULTILINE | re
 SCRIPT_RE = re.compile((SCRIPT_FORMAT + ';\n\n').format("(.+)"), re.MULTILINE | re.UNICODE)
 
 
-def grouper(iterable, n):
-    """Collect data into fixed-length chunks or blocks.
-
-    :param iterable:
-    :type iterable: collections.Iterable
-    :param n: length of chunk
-    :type n: int
-
-    :return: iterator of chunks
-    :rtype: collections.Iterable
-    """
+def grouper(iterable: Iterable, n: int) -> Iterable:
+    """Collect data into fixed-length chunks or blocks."""
     # grouper('ABCDEF', 3) --> ABC DEF
     args = [iter(iterable)] * n
     return zip(*args)
 
 
-def get_migration_data(config, revision):
+def get_migration_data(config: Config, revision: str) -> dict:
     """Get migration data in form of a dict.
 
-    :param config: alembic config object
-    :type config: alembic.config.Config
-    :param revision: revision name
-    :type revision: str
-
-    :return: migration data for given revision in form:
+    Returns migration data for given revision in form:
         {
             'revision': '123123123',
             'down_revision': '234234234',
@@ -103,17 +89,8 @@ def get_migration_data(config, revision):
         phases=phases)
 
 
-def get_script_attributes(config, script):
-    """Get additional script attributes.
-
-    :param config: alembic config object
-    :type config: alembic.config.Config
-    :param script: alembic script object
-    :type script: alembic.config.Script
-
-    :return: dict of script attributes
-    :rtype: dict
-    """
+def get_script_attributes(config: Config, script: Script) -> dict:
+    """Get additional script attributes."""
     attrs = frozenset(attr.strip() for attr in config.get_main_option('script-attributes', '').split())
     result = {}
     for attr in attrs:
@@ -126,28 +103,20 @@ def get_script_attributes(config, script):
     return result
 
 
-def get_migrations_data(config):
+def get_migrations_data(config: Config) -> list:
     """Get migration data for all migrations in script directory.
 
-    :param config: alembic config object
-    :type config: alembic.config.Config
-
-    :return: migrations data list in form:
+    Returns migrations data list in form:
         [<migration data 1>, <migration data 2>, ...]
     """
     script_directory = ScriptDirectory.from_config(config)
     return [get_migration_data(config, script.revision) for script in reversed(list(script_directory.walk_revisions()))]
 
 
-def get_script_data(script_directory, file_name):
+def get_script_data(script_directory: ScriptDirectory, file_name: str) -> dict:
     """Get script data.
 
-    :param script: alembic script directory object
-    :type script: alembic.script.ScriptDirectory
-    :param file_name: script file name
-    :type file_name: str
-
-    :return: script data dictionary in form:
+    Returns script data dictionary in form:
          {'type': 'mysql', 'script': 'alter table'[, 'path': 'scripts/script.py']}
     """
     script_type = 'unknown'
@@ -160,21 +129,15 @@ def get_script_data(script_directory, file_name):
     return dict(type=script_type, script=script_text, path=file_name)
 
 
-def generate_migration_graph(config, label_callback=None):
+def generate_migration_graph(config: Config, label_callback: Optional[Callable] = None) -> str:
     """Generate a graphviz dot digraph containing a graph of all the revisions.
-
-    :param script: alembic script directory object
-    :type script: alembic.script.ScriptDirectory
-    :param label_callback: A callable to use for the label, will be passed the migration's data from get_migration_data.
-    :type label_callback: callable.
-
-    :return: A string with the dot digraph.
+    Here label_callback will be passed the migration's data from get_migration_data.
     """
-    def default_label(data):
+    def default_label(migration_data: dict):
         attributes = []
-        for key, value in data['attributes'].items():
+        for key, value in migration_data['attributes'].items():
             attributes.append(u'- {0}: {1}'.format(key, value))
-        return u'{0}\n{1}'.format(data['revision'], '\n'.join(attributes))
+        return u'{0}\n{1}'.format(migration_data['revision'], '\n'.join(attributes))
 
     if not label_callback:
         label_callback = default_label

@@ -2,16 +2,12 @@
 
 import codecs
 from os.path import abspath, dirname, join
-import sys
 
 from setuptools import setup
 
 long_description = []
 
 install_requires = ['alembic']
-
-if sys.version_info < (3, 0, 0):
-    install_requires.append('subprocess32')
 
 tests_require = [
     "mock==1.0.1",
@@ -26,13 +22,13 @@ for text_file in ['README.rst', 'CHANGES.rst']:
 
 setup(
     name="alembic-offline",
-    description="Offline extensions for alemic database migration framework",
+    description="Offline extensions for Alembic database migration framework for SQLAlchemy",
     long_description='\n'.join(long_description),
     author="Anatoly Bubenkov, Paylogic International and others",
     license="MIT license",
     author_email="developers@paylogic.com",
     url="https://github.com/paylogic/alembic-offline",
-    version="1.2.0",
+    version="2.0.0",
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Other Environment',
@@ -42,11 +38,11 @@ setup(
         'Operating System :: POSIX :: Linux',
         'Operating System :: Unix',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
     ],
     packages=["alembic_offline"],
     install_requires=install_requires,

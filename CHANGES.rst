@@ -1,36 +1,63 @@
 Changelog
 =========
 
+2.0.0 - 2024-07-08
+------------------
+
+Added:
+~~~~~~
+* Support python 3.10
+
+Removed:
+~~~~~~~~
+* Revert dependency tree generation command (**breaking**)
+* Drop support python 2 and 3.4
+
 1.2.0
 -----
 
-* add migration dependency tree generation command (hvdklauw)
+Added:
+~~~~~~
+* add migration dependency tree generation command
 
 1.1.0
 -----
 
-* add down_revision to migration data (bubenkoff)
-* reverse migration order to simplify the application (bubenkoff)
+Added:
+~~~~~~
+* add down_revision to migration data
+
+Removed:
+~~~~~~~~
+* reverse migration order to simplify the application
 
 1.0.5
 -----
 
-* correctly handle multi-phased migration data extraction (bubenkoff)
+Added:
+~~~~~~
+* correctly handle multi-phased migration data extraction
 
 1.0.4
 -----
 
-* online script execution implemented (bubenkoff)
-* `get_migrations_data` API (bubenkoff)
+Added:
+~~~~~~
+* online script execution implemented
+* `get_migrations_data` API
 
 1.0.3
 -----
 
-* Added arbitrary script operation (bubenkoff)
-* Strict phases configuration assertions for phased migration decorator (bubenkoff)
-* `get_migration_data` API (bubenkoff)
+Added:
+~~~~~~
+* Added arbitrary script operation
+* Strict phases configuration assertions for phased migration decorator
+* `get_migration_data` API
 
 1.0.0
 -----
 
-* Initial public release (bubenkoff)
+Added:
+~~~~~~
+* Initial public release
