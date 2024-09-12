@@ -4,7 +4,7 @@ alembic-offline
 .. image:: https://api.travis-ci.org/paylogic/alembic-offline.png
    :target: https://travis-ci.org/paylogic/alembic-offline
 
-.. image:: https://pypip.in/v/alembic-offline/badge.png
+.. image:: https://img.shields.io/pypi/v/alembic-offline.svg
    :target: https://crate.io/packages/alembic-offline/
 
 .. image:: https://coveralls.io/repos/paylogic/alembic-offline/badge.svg?branch=master
